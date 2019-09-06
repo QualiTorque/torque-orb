@@ -40,7 +40,7 @@ commands:
         type: integer
         default: 30      
       duration:
-        desc ription: -
+        description: -
           Duration (ISO 8601), after which CloudShell Colony will stop the deployment
         type: string
         default: "PT2H"
