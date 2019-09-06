@@ -1,0 +1,108 @@
+version: 2.1
+
+description: |
+  A set of commands for working with CloudShell Colony. Requirements: bash, curl
+
+commands:
+  start-sandbox:
+    description: |
+      Launches CloudShell Colony Sandbox from a blueprint
+    parameters:
+      colony-token:
+        description: |
+          Name of environment variable containing Colony API Token
+        type: env_var_name
+        default: CS_COLONY_TOKEN
+      colony-url:
+        description: |
+          URL of Colony Server
+        type: env_var_name
+        default: CS_COLONY_SERVER
+      space:
+        description: |
+          Name of Colony space
+        type: env_var_name
+        default: CS_COLONY_SPACE
+      blueprint:
+        description: |
+          Name of the blueprint used for creating a Colony sandbox.
+        type: string
+        default: ""
+      sandbox-name:
+        description: |
+          Name of sandbox
+        type: string
+        default: "circleci-orb-sb"
+      timeout:
+        description: >
+          Timeout for this step in minutes. If the sandbox will not be ready when the timeout is reached,
+          CloudShell Colony will abort the deployment
+        type: integer
+        default: 30      
+      duration:
+        desc ription: -
+          Duration (ISO 8601), after which CloudShell Colony will stop the deployment
+        type: string
+        default: "PT2H"
+    steps:
+    - run:
+        name: Deploy Colony Sandbox
+        command: |
+          PAYLOAD=(
+            "{
+               'sandbox_name':'$<<parameters.sandbox-name>>',
+               'blueprint_name':'$<<parameters.blueprint>>',
+               'duration': '$<<parameters.duration>>',
+               'automation':true
+            }"
+          )
+          echo $PAYLOAD
+
+          sb=`curl -X POST "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox" \
+                   -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" \
+                   -H "Content-Type:  application/json" -d "$PAYLOAD"`
+
+          sb=`echo $sb | sed 's/.*:"//' | sed 's/".*//'`
+          echo "export SANDBOX_ID=$sb" >> $BASH_ENV
+    - run:
+        name: Wait For Sandbox
+        command: |
+          timeout=`date --date="$<<parameters.timeout>> minutes" +%s`
+          status=''
+          while [ $(date +%s) -le $timeout || $]; do 
+            details=`curl -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$SANDBOX_ID" \
+                          -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
+            status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
+          done
+          echo "export SANDBOX_DETAILS=$details" >> $BASH_ENV  
+  end-sandbox:
+    description: |
+      Stops CloudShell Colony sandbox environment
+    parameters:
+      colony-token:
+        description: |
+          Name of environment variable containing Colony API Token
+        type: env_var_name
+        default : CS_COLONY_TOKEN
+      colony-url:
+        description: |
+          URL of Colony Server
+        type: env_var_name
+        default: CS_COLONY_SERVER
+      space:
+        description: |
+          Name of Colony space
+        type: env_var_name
+        default: CS_COLONY_SPACE
+      sandbox-id:
+        description: |
+          Environment variable with the ID of the sandbox
+        type: env_var_name
+        default: SANDBOX_ID
+    steps:
+    - run:
+        name: End CloudShell Colony Sandbox
+        command: |
+          curl -X DELETE "$<<parameters.colony-url>>/api/spaces/promotions-manager/sandbox/$<<parameters.sandbox-id>>" \
+               -H "accept: text/plain" -H "Authorization: bearer $<<colony-token>>"
+
