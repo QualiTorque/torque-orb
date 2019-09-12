@@ -40,7 +40,7 @@ commands:
         type: integer
         default: 30      
       duration:
-        description: -
+        description: |
           Duration (ISO 8601), after which CloudShell Colony will stop the deployment
         type: string
         default: "PT2H"
@@ -50,10 +50,10 @@ commands:
         command: |
           PAYLOAD=(
             "{
-               'sandbox_name':'$<<parameters.sandbox-name>>',
-               'blueprint_name':'$<<parameters.blueprint>>',
-               'duration': '$<<parameters.duration>>',
-               'automation':true
+               'sandbox_name':'<<parameters.sandbox-name>>',
+               'blueprint_name':'<<parameters.blueprint>>',
+               'duration': '<<parameters.duration>>',
+               'automation': true
             }"
           )
           echo $PAYLOAD
@@ -104,5 +104,5 @@ commands:
         name: End CloudShell Colony Sandbox
         command: |
           curl -X DELETE "$<<parameters.colony-url>>/api/spaces/promotions-manager/sandbox/$<<parameters.sandbox-id>>" \
-               -H "accept: text/plain" -H "Authorization: bearer $<<colony-token>>"
+               -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"
 
