@@ -68,8 +68,9 @@ commands:
         name: Wait For Sandbox
         command: |
           timeout=`date --date="$<<parameters.timeout>> minutes" +%s`
+          echo "Waiting for ${timeout} minutes..."
           status=''
-          while [ $(date +%s) -le $timeout || $status != "Active" ]; do 
+          while [[ $(date +%s) -le $timeout || $status != "Active" ]]; do 
             details=`curl -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$SANDBOX_ID" \
                           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
             status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
