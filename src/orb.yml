@@ -58,20 +58,20 @@ commands:
           )
           echo $PAYLOAD
 
-          sb=`curl -X POST "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox" \
+          sb=`curl --silent -X POST "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox" \
                    -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" \
-                   -H "Content-Type:  application/json" -d "$PAYLOAD"`
+                   -H "Cont ent-Type:  application/json" -d "$PAYLOAD"`
 
           sb=`echo $sb | sed 's/.*:"//' | sed 's/".*//'`
           echo "export SANDBOX_ID=$sb" >> $BASH_ENV
     - run:
         name: Wait For Sandbox
         command: |
-          timeout=`date --date="$<<parameters.timeout>> minutes" +%s`
+          timeout=`date --date="<<parameters.timeout>> minutes" +%s`
           echo "Waiting for ${timeout} minutes..."
           status=''
           while [[ $(date +%s) -le $timeout || $status != "Active" ]]; do 
-            details=`curl -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$SANDBOX_ID" \
+            details=`curl --silent -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$SANDBOX_ID" \
                           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
             status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
           done
@@ -104,6 +104,6 @@ commands:
     - run:
         name: End CloudShell Colony Sandbox
         command: |
-          curl -X DELETE "$<<parameters.colony-url>>/api/spaces/promotions-manager/sandbox/$<<parameters.sandbox-id>>" \
+          curl --silent -X DELETE "$<<parameters.colony-url>>/api/spaces/promotions-manager/sandbox/$<<parameters.sandbox-id>>" \
                -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"
 
