@@ -50,7 +50,7 @@ commands:
         command: |
           PAYLOAD=(
             "{
-               'sandbox_name':'<<parameters.sandbox-name>>',
+               'sandbox_name':'<<parameters.sandbox-name>>-${CIRCLE_BUILD_NUM}',
                'blueprint_name':'<<parameters.blueprint>>',
                'duration': '<<parameters.duration>>',
                'automation': true
