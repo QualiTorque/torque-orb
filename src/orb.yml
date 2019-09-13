@@ -60,22 +60,30 @@ commands:
 
           sb=`curl --silent -X POST "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox" \
                    -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" \
-                   -H "Cont ent-Type:  application/json" -d "$PAYLOAD"`
+                   -H "Content-Type:  application/json" -d "$PAYLOAD"`
 
           sb=`echo $sb | sed 's/.*:"//' | sed 's/".*//'`
+          echo "Sandbox with id $sb has been started"
           echo "export SANDBOX_ID=$sb" >> $BASH_ENV
     - run:
         name: Wait For Sandbox
         command: |
+          echo "Waiting for sandbox $SANDBOX_ID"
           timeout=`date --date="<<parameters.timeout>> minutes" +%s`
-          echo "Waiting for ${timeout} minutes..."
           status=''
-          while [[ $(date +%s) -le $timeout || $status != "Active" ]]; do 
+          while [[ $(date +%s) -le $timeout && $status != "Active" ]]; do
+            echo "****"
             details=`curl --silent -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$SANDBOX_ID" \
                           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
             status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
+            echo "Status is $status"
+            sleep 15
           done
-          echo "export SANDBOX_DETAILS=$details" >> $BASH_ENV  
+          if [[ $status != "Active" ]]; then
+            echo "Timeout was reached or Sandbox is active with errors"
+            exit 1
+          fi
+          echo "export SANDBOX_DETAILS=$details" >> $ BASH_ENV
   end-sandbox:
     description: |
       Stops CloudShell Colony sandbox environment
