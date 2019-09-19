@@ -1,0 +1,7 @@
+version: 2.1
+
+description: >
+  This orb integrates CloudShell Colony into your CI/CD pipeline.
+  You can use the available build tasks to create a sandbox from any blueprint,
+  start your tests and end the sandbox when finished.
+  To use this orb you need to have an account in CloudShell Colony and API token

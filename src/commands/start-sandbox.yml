@@ -1,0 +1,111 @@
+description: |
+  Launches CloudShell Colony Sandbox from a blueprint
+parameters:
+  colony-token:
+    description: |
+      Name of environment variable containing Colony API Token
+    type: env_var_name
+    default: CS_COLONY_TOKEN
+  colony-url:
+    description: |
+      URL of Colony Server
+    type: env_var_name
+    default: CS_COLONY_SERVER
+  space:
+    description: |
+      Name of Colony space
+    type: env_var_name
+    default: CS_COLONY_SPACE
+  blueprint:
+    description: |
+      Name of the blueprint used for creating a Colony sandbox.
+    type: string
+    default: ""
+  sandbox-name:
+    description: |
+      Name of sandbox.
+    type: string
+    default: "circleci-orb-sandbox"
+  sandbox-id-variable:
+    description: |
+      The name of environment variable which will be used to store sandbox id
+    type: string
+    default: "SANDBOX_ID"
+  sandbox-details-variable:
+    description: |
+      The name of environment variable which will be used to store full information about sandbox
+    type: string
+    default: "SANDBOX_DETAILS"
+  inputs:
+    description: |
+      String with the list of inputs.
+      Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
+    type: string
+    default: "{}"
+  artifacts:
+    description: |
+      String with the list of artifacts.
+      Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
+    type: string
+    default: "{}"
+  timeout:
+    description: >
+      Timeout for this step in minutes. If the sandbox will not be ready when the timeout is reached,
+      CloudShell Colony will abort the deployment
+    type: integer
+    default: 30      
+  duration:
+    description: |
+      Duration (ISO 8601), after which CloudShell Colony will stop the deployment
+    type: string
+    default: "PT2H"
+steps:
+- run:
+    name: Deploy Colony Sandbox
+    command: |
+      PAYLOAD=(
+        "{
+           'sandbox_name':'<<parameters.sandbox-name>>-${CIRCLE_BUILD_NUM}',
+           'blueprint_name':'<<parameters.blueprint>>',
+           'duration': '<<parameters.duration>>',
+           'inputs': <<parameters.inputs>>,
+           'artifacts': <<parameters.artifacts>>,
+           'automation': true
+        }"
+      )
+      echo $PAYLOAD
+
+      sb=`curl --silent -X POST "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox" \
+               -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" \
+               -H "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
+
+      sb=`echo $sb | sed 's/.*:"//' | sed 's/".*//'`
+      echo "Sandbox with id $sb has been started"
+      echo "export <<parameters.sandbox-id-variable>>=$sb" >> $BASH_ENV
+- run:
+    name: Wait For Sandbox
+    command: |
+      echo "Waiting for sandbox $<<parameters.sandbox-id-variable>>"
+      timeout=`date --date="<<parameters.timeout>> minutes" +%s`
+      status=''
+      while [[ $(date +%s) -le $timeout && $status != "Active" ]]; do
+        echo "****"
+        sleep 25
+        details=`curl --silent \
+           -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id-variable>>" \
+           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
+        status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
+        echo "Status is $status"
+      done
+      if [[ $status != "Active" ]]; then
+        echo "Timeout was reached or Sandbox is active with errors"
+        exit 1
+      fi
+      echo "export <<parameters.sandbox-details-variable>>=$details" >> $BASH_ENV
+      var=1
+      for link in `echo $details | egrep -o '\["http?://[^ ]+*."\]' | sed 's/"//g' | tr -d '[],'`
+      do
+        echo "Writing quick link $link to environment variable SB_${<<parameters.sandbox-id-variable>>}_SHORTCUT_${var}"
+        echo "export SB_${<<parameters.sandbox-id-variable>>}_SHORTCUT_${var}=$link" >> $BASH_ENV
+        var=$((var+1))
+      done
