@@ -1,29 +1,29 @@
 description: |
   Stops CloudShell Colony sandbox environment
-    parameters:
-      colony-token:
-        description: |
-          Name of environment variable containing Colony API Token
-        type: env_var_name
-        default : CS_COLONY_TOKEN
-      colony-url:
-        description: |
-          URL of Colony Server
-        type: env_var_name
-        default: CS_COLONY_SERVER
-      space:
-        description: |
-          Name of Colony space
-        type: env_var_name
-        default: CS_COLONY_SPACE
-      sandbox-id:
-        description: |
-          Environment variable with the ID of the sandbox
-        type: env_var_name
-        default: SANDBOX_ID
-    steps:
-    - run:
-        name: End CloudShell Colony Sandbox
-        command: |
-          curl --silent -X DELETE "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id>>" \
-               -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" || exit 1
+parameters:
+  colony-token:
+    description: |
+      Name of environment variable containing Colony API Token
+    type: env_var_name
+    default : CS_COLONY_TOKEN
+  colony-url:
+    description: |
+      URL of Colony Server
+    type: env_var_name
+    default: CS_COLONY_SERVER
+  space:
+    description: |
+      Name of Colony space
+    type: env_var_name
+    default: CS_COLONY_SPACE
+  sandbox-id:
+    description: |
+      Environment variable with the ID of the sandbox
+    type: env_var_name
+    default: SANDBOX_ID
+steps:
+- run:
+    name: End CloudShell Colony Sandbox
+    command: |
+      curl --silent -X DELETE "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id>>" \
+           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" || exit 1
