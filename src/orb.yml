@@ -97,12 +97,12 @@ commands:
           status=''
           while [[ $(date +%s) -le $timeout && $status != "Active" ]]; do
             echo "****"
+            sleep 25
             details=`curl --silent \
                -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id-variable>>" \
-              -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
+               -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
             status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
             echo "Status is $status"
-            sleep 15
           done
           if [[ $status != "Active" ]]; then
             echo "Timeout was reached or Sandbox is active with errors"
