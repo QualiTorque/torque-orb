@@ -1,0 +1,23 @@
+version: 2.1
+#TODO: update orb path
+orbs:
+  colony:  ddovbii/colony@dev:beta
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.4.1
+    steps:
+      - colony/start-sandbox:
+          sandbox-name: "test-sandbox"
+          blueprint: "my-application"
+          inputs: "{'AWS_INSTANCE_TYPE': 'm5.large'}"
+          artifacts: "{'app-frontend':'latest/my-app.latest.tar.gz'}"
+      - run:
+          name: Fetch Details
+          command: echo "${SANDBOX_DETAILS}"
+      - colony/end-sandbox:
+          sandbox-id: SANDBOX_ID
+workflows:
+  easy:
+    jobs:
+      - build
