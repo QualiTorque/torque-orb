@@ -20,7 +20,7 @@ Using this orb you can integrate the CloudShell Colony sandboxes into your CI/CD
  
 3. In the config.yml, call the `cloudshell-colony/start-sandbox` and `cloudshell-colony/end-sandbox` to start and stop 
 sandbox in Colony
-4. Supply parameters to customize orb behaviour (see the list of parameters for orb commands [here](ttps://circleci.com/orbs/registry/orb/quali/cloudshell-colony#commands) 
+4. Supply parameters to customize orb behaviour (see the list of parameters for orb commands [here](https://circleci.com/orbs/registry/orb/quali/cloudshell-colony#commands) 
 5. After starting colony sandbox (`cloudshell-colony/start-sandbox` command) you can use the following environment
 variables in your job steps (the names of variable could be overridden):
 
