@@ -16,7 +16,7 @@ usage:
             artifacts: "{'app-frontend':'latest/my-app.latest.tar.gz'}"
         - run:
             name: Fetch Details
-            command: echo "${SANDBOX_DETAILS}"
+            command: echo "Sandbox ID is ${SANDBOX_ID}"
         - colony/end-sandbox:
             sandbox-id: SANDBOX_ID
   workflows:
