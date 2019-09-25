@@ -40,7 +40,18 @@ parameters:
   steps:
     type: steps
     description: Steps to execute once the Colony Sandbox is available
-executor: default
+  image:
+    description: The name of image
+    default: 'circleci/python'
+    type: string
+  tag:
+    description: The image version tag
+    default: latest
+    type: string
+executor:
+  name: default
+  image: <<parameters.image>>
+  tag: <<parameters.tag>>
 steps:
   - checkout
   - start-sandbox:
