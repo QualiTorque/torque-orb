@@ -5,4 +5,7 @@ description: >
   You can use the available build tasks to create a sandbox from any blueprint,
   start your tests and end the sandbox when finished.
   To use this orb you need to have an account in CloudShell Colony and API token
-  The source code for this orb can be found here https://github.com/QualiNext/cloudshell-colony
+
+display:
+  home_url: https://www.quali.com/products/cloudshell-colony/
+  source_url: https://github.com/QualiNext/cloudshell-colony
