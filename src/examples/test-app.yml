@@ -7,7 +7,7 @@ usage:
   version: 2.1
   
   orbs:
-    colony: quali/torque@1.0
+    torque: quali/torque@1.0
     aws-s3: circleci/aws-s3@1.0.11
   jobs:
     build-and-publish:
@@ -27,7 +27,7 @@ usage:
     leadeasy:
       jobs:
         - build-and-publish
-        - colony/sandbox:
+        - torque/sandbox:
             name: Test Application
             sandbox-name: "test-sandbox"
             blueprint: "my-web-application"

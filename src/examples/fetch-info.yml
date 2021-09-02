@@ -3,13 +3,13 @@ description: |
 usage:
   version: 2.1
   orbs:
-    colony: quali/torque@1
+    torque: quali/torque@1
   jobs:
     build:
       docker:
         - image: circleci/ruby:2.4.1
       steps:
-        - colony/start-sandbox:
+        - torque/start-sandbox:
             sandbox-name: "test-sandbox"
             blueprint: "my-application"
             inputs: "{'AWS_INSTANCE_TYPE': 'm5.large'}"
@@ -17,7 +17,7 @@ usage:
         - run:
             name: Fetch Details
             command: echo "Sandbox ID is ${SANDBOX_ID}"
-        - colony/end-sandbox:
+        - torque/end-sandbox:
             sandbox-id: SANDBOX_ID
   workflows:
     easy:
