@@ -1,12 +1,12 @@
 description: |
   Launches Torque Sandbox from a blueprint
 parameters:
-  colony-token:
+  torque-token:
     description: |
       Name of environment variable containing Torque API Token
     type: env_var_name
     default: TORQUE_TOKEN
-  colony-url:
+  torque-url:
     description: |
       URL of Torque Server
     type: env_var_name
@@ -75,8 +75,8 @@ steps:
       )
       echo $PAYLOAD
 
-      sb=`curl --silent -X POST "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox" \
-               -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" \
+      sb=`curl --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox" \
+               -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>" \
                -H "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
 
       sb=`echo $sb | sed 's/.*:"//' | sed 's/".*//'`
@@ -92,8 +92,8 @@ steps:
         echo "****"
         sleep 25
         details=`curl --silent \
-           -X GET "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id-variable>>" \
-           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>"`
+           -X GET "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id-variable>>" \
+           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>"`
         status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
         echo "Status is $status"
       done

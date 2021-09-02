@@ -1,12 +1,12 @@
 description: |
   Run your build scenario once sandbox environment is ready.
 parameters:
-  colony-token:
+  torque-token:
     description: |
       Name of environment variable containing Torque API Token
     type: env_var_name
     default: TORQUE_TOKEN
-  colony-url:
+  torque-url:
     description: |
       URL of Torque Server
     type: env_var_name
@@ -59,8 +59,8 @@ steps:
       blueprint: <<parameters.blueprint>>
       inputs: <<parameters.inputs>>
       artifacts: <<parameters.artifacts>>
-      colony-token: <<parameters.colony-token>>
-      colony-url: <<parameters.colony-url>>
+      torque-token: <<parameters.torque-token>>
+      torque-url: <<parameters.torque-url>>
       space: <<parameters.space>>
   - steps: <<parameters.steps>>
   - end-sandbox
