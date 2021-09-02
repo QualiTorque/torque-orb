@@ -7,5 +7,5 @@ description: >
   To use this orb you need to have an account in Torque and API token
 
 display:
-  home_url: https://www.quali.com/products/cloudshell-colony/
-  source_url: https://github.com/QualiNext/cloudshell-colony
+  home_url: https://www.quali.com/torque/
+  source_url: https://github.com/QualiTorque/torque-orb
