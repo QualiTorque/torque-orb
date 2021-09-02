@@ -1,5 +1,5 @@
 description: |
-  Launches CloudShell Colony Sandbox from a blueprint
+  Launches Torque Sandbox from a blueprint
 parameters:
   colony-token:
     description: |
@@ -51,12 +51,12 @@ parameters:
   timeout:
     description: >
       Timeout for this step in minutes. If the sandbox will not be ready when the timeout is reached,
-      CloudShell Colony will abort the deployment
+      Torque will abort the deployment
     type: integer
     default: 30      
   duration:
     description: |
-      Duration (ISO 8601), after which CloudShell Colony will stop the deployment
+      Duration (ISO 8601), after which Torque will stop the deployment
     type: string
     default: "PT2H"
 steps:

@@ -1,22 +1,22 @@
-# CloudShell Colony Orb for CircleCI
+# Torque Orb for CircleCI
 
-## The CloudShell Colony Orb
+## The Torque Orb
 
-CloudShell Colony provides on-demands sandbox environments integrating with test tools and storage providers to pull
+Torque provides on-demands sandbox environments integrating with test tools and storage providers to pull
 the artifacts and push to Production.
 
-Using this orb you can integrate the CloudShell Colony sandboxes into your CI/CD pipeline configure in CircleCI
+Using this orb you can integrate the Torque sandboxes into your CI/CD pipeline configure in CircleCI
 
-## How to use CloudShell Colony Orb
+## How to use Torque Orb
 
 1. Follow the instructions at the [Orb Quick Start Guide](https://circleci.com/orbs/registry/orb/quali/cloudshell-colony#quick-start) to enable usage of Orbs in your projects workflow.
 2. Set up the following environment variables in CircleCI project settings:
 
-    `CS_COLONY_SERVER` - The url of CloudShell Colony server
+    `CS_COLONY_SERVER` - The url of Torque server
     
-    `CS_COLONY_TOKEN` - The Colony Token which could be generate on integrations page of Colony Settings
+    `CS_COLONY_TOKEN` - The Torque Token which could be generate on integrations page of Colony Settings
 
-    `CS_COLONY_SPACE` - The name of your CloudShell Colony space
+    `CS_COLONY_SPACE` - The name of your Torque space
  
 3. In the config.yml, call the `cloudshell-colony/start-sandbox` and `cloudshell-colony/end-sandbox` to start and stop 
 sandbox in Colony

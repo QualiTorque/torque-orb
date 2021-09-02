@@ -1,6 +1,6 @@
 description: |
   This example demonstrates how you can build and test your app using Colony Orb.
-  First build app and publish it to s3 bucket. Than deploy CloudShell Colony Sandbox
+  First build app and publish it to s3 bucket. Than deploy Torque Sandbox
   with your new application as an artifact parameter and do some testing against the endpoint
   of your deployed application.
 usage:
