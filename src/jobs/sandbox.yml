@@ -5,17 +5,17 @@ parameters:
     description: |
       Name of environment variable containing Colony API Token
     type: env_var_name
-    default: CS_COLONY_TOKEN
+    default: TORQUE_TOKEN
   colony-url:
     description: |
       URL of Colony Server
     type: env_var_name
-    default: CS_COLONY_SERVER
+    default: TORQUE_SERVER
   space:
     description: |
       Name of Colony space
     type: env_var_name
-    default: CS_COLONY_SPACE
+    default: TORQUE_SPACE
   blueprint:
     description: |
       Name of the blueprint used for creating a Colony sandbox.
