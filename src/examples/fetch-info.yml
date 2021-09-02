@@ -3,7 +3,7 @@ description: |
 usage:
   version: 2.1
   orbs:
-    colony: quali/cloudshell-colony@1
+    colony: quali/torque@1
   jobs:
     build:
       docker:

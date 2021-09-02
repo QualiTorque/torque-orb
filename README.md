@@ -9,7 +9,7 @@ Using this orb you can integrate the Torque sandboxes into your CI/CD pipeline c
 
 ## How to use Torque Orb
 
-1. Follow the instructions at the [Orb Quick Start Guide](https://circleci.com/orbs/registry/orb/quali/cloudshell-colony#quick-start) to enable usage of Orbs in your projects workflow.
+1. Follow the instructions at the [Orb Quick Start Guide](https://circleci.com/orbs/registry/orb/quali/torque#quick-start) to enable usage of Orbs in your projects workflow.
 2. Set up the following environment variables in CircleCI project settings:
 
     `TORQUE_SERVER` - The url of Torque server
@@ -18,10 +18,10 @@ Using this orb you can integrate the Torque sandboxes into your CI/CD pipeline c
 
     `TORQUE_SPACE` - The name of your Torque space
  
-3. In the config.yml, call the `cloudshell-colony/start-sandbox` and `cloudshell-colony/end-sandbox` to start and stop 
+3. In the config.yml, call the `torque/start-sandbox` and `torque/end-sandbox` to start and stop 
 sandbox in Colony
-4. Supply parameters to customize orb behaviour (see the list of parameters for orb commands [here](https://circleci.com/orbs/registry/orb/quali/cloudshell-colony#commands) 
-5. After starting colony sandbox (`cloudshell-colony/start-sandbox` command) you can use the following environment
+4. Supply parameters to customize orb behaviour (see the list of parameters for orb commands [here](https://circleci.com/orbs/registry/orb/quali/torque#commands) 
+5. After starting colony sandbox (`torque/start-sandbox` command) you can use the following environment
 variables in your job steps (the names of variable could be overridden):
 
     `SANDBOX_ID` - the id of launched sandbox
