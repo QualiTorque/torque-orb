@@ -1,0 +1,66 @@
+description: |
+  Run your build scenario once sandbox environment is ready.
+parameters:
+  torque-token:
+    description: |
+      Name of environment variable containing Torque API Token
+    type: env_var_name
+    default: TORQUE_TOKEN
+  torque-url:
+    description: |
+      URL of Torque Server
+    type: env_var_name
+    default: TORQUE_SERVER
+  space:
+    description: |
+      Name of Torque space
+    type: env_var_name
+    default: TORQUE_SPACE
+  blueprint:
+    description: |
+      Name of the blueprint used for creating a Torque sandbox.
+    type: string
+  sandbox-name:
+    description: |
+      Name of sandbox.
+    type: string
+    default: "circleci-orb-sandbox"
+  inputs:
+    description: |
+      String with the list of inputs.
+      Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
+    type: string
+    default: "{}"
+  artifacts:
+    description: |
+      String with the list of artifacts.
+      Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
+    type: string
+    default: "{}"
+  steps:
+    type: steps
+    description: Steps to execute once the Torque Sandbox is available
+  image:
+    description: The name of image
+    default: 'circleci/python'
+    type: string
+  tag:
+    description: The image version tag
+    default: latest
+    type: string
+executor:
+  name: default
+  image: <<parameters.image>>
+  tag: <<parameters.tag>>
+steps:
+  - checkout
+  - start-sandbox:
+      sandbox-name: <<parameters.sandbox-name>>
+      blueprint: <<parameters.blueprint>>
+      inputs: <<parameters.inputs>>
+      artifacts: <<parameters.artifacts>>
+      torque-token: <<parameters.torque-token>>
+      torque-url: <<parameters.torque-url>>
+      space: <<parameters.space>>
+  - steps: <<parameters.steps>>
+  - end-sandbox

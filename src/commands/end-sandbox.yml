@@ -1,21 +1,21 @@
 description: |
-  Stops CloudShell Colony sandbox environment
+  Stops Torque sandbox environment
 parameters:
-  colony-token:
+  torque-token:
     description: |
-      Name of environment variable containing Colony API Token
+      Name of environment variable containing Torque API Token
     type: env_var_name
-    default : CS_COLONY_TOKEN
-  colony-url:
+    default : TORQUE_TOKEN
+  torque-url:
     description: |
-      URL of Colony Server
+      URL of Torque Server
     type: env_var_name
-    default: CS_COLONY_SERVER
+    default: TORQUE_SERVER
   space:
     description: |
-      Name of Colony space
+      Name of Torque space
     type: env_var_name
-    default: CS_COLONY_SPACE
+    default: TORQUE_SPACE
   sandbox-id:
     description: |
       Environment variable with the ID of the sandbox
@@ -23,7 +23,7 @@ parameters:
     default: SANDBOX_ID
 steps:
 - run:
-    name: End CloudShell Colony Sandbox
+    name: End Torque Sandbox
     command: |
-      curl --silent -X DELETE "$<<parameters.colony-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id>>" \
-           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.colony-token>>" || exit 1
+      curl --silent -X DELETE "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id>>" \
+           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>" || exit 1

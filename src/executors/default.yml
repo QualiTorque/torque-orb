@@ -1,0 +1,14 @@
+description: |
+  The sample executor.
+  Any executor with curl pre-installed can be used instead
+docker:
+  - image: '<< parameters.image >>:<< parameters.tag >>'
+parameters:
+  image:
+    description: The name of image
+    default: 'circleci/python'
+    type: string
+  tag:
+    description: The image version tag
+    default: latest
+    type: string

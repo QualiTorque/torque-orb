@@ -1,0 +1,45 @@
+description: |
+  This example demonstrates how you can build and test your app using Torque Orb.
+  First build app and publish it to s3 bucket. Than deploy Torque Sandbox
+  with your new application as an artifact parameter and do some testing against the endpoint
+  of your deployed application.
+usage:
+  version: 2.1
+  
+  orbs:
+    torque: quali/torque@1.0
+    aws-s3: circleci/aws-s3@1.0.11
+  jobs:
+    build-and-publish:
+      docker:
+        - image: circleci/ruby:2.4.1
+      steps:
+        - checkout
+        - run:
+            name: Archive app
+            command: |
+              mkdir -p workspace
+              tar -zcf my-webapp.latest.tar.gz -C my_app/ .
+        - aws-s3/copy:
+            from: my-webapp.latest.tar.gz
+            to: "s3://my-webapp-artifacts/latest/"
+  workflows:
+    leadeasy:
+      jobs:
+        - build-and-publish
+        - torque/sandbox:
+            name: Test Application
+            sandbox-name: "test-sandbox"
+            blueprint: "my-web-application"
+            inputs: "{'AWS_INSTANCE_TYPE': 'm5.large'}"
+            artifacts: "{'webapp-frontend':'latest/my-webapp.latest.tar.gz'}"
+            steps:
+              - run: echo "Do some testing here"
+              - run:
+                  command: |
+                    echo "Getting application endpoint"
+                    SB_ENDPOINT="SB_${SANDBOX_ID}_SHORTCUT_1"
+                    echo "Checking ${!SB_ENDPOINT}"
+                    curl --write-out "%{http_code}\n" --silent --output /dev/null "${!SB_ENDPOINT}" 
+            requires:
+              - build-and-publish
