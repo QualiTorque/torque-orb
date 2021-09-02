@@ -3,22 +3,22 @@ description: |
 parameters:
   colony-token:
     description: |
-      Name of environment variable containing Colony API Token
+      Name of environment variable containing Torque API Token
     type: env_var_name
     default: TORQUE_TOKEN
   colony-url:
     description: |
-      URL of Colony Server
+      URL of Torque Server
     type: env_var_name
     default: TORQUE_SERVER
   space:
     description: |
-      Name of Colony space
+      Name of Torque space
     type: env_var_name
     default: TORQUE_SPACE
   blueprint:
     description: |
-      Name of the blueprint used for creating a Colony sandbox.
+      Name of the blueprint used for creating a Torque sandbox.
     type: string
     default: ""
   sandbox-name:
@@ -61,7 +61,7 @@ parameters:
     default: "PT2H"
 steps:
 - run:
-    name: Deploy Colony Sandbox
+    name: Deploy Torque Sandbox
     command: |
       PAYLOAD=(
         "{

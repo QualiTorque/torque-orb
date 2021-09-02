@@ -3,7 +3,7 @@ description: |
 parameters:
   colony-token:
     description: |
-      Name of environment variable containing Colony API Token
+      Name of environment variable containing Torque API Token
     type: env_var_name
     default : TORQUE_TOKEN
   colony-url:

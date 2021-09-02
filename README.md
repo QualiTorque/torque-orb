@@ -14,14 +14,14 @@ Using this orb you can integrate the Torque sandboxes into your CI/CD pipeline c
 
     `TORQUE_SERVER` - The url of Torque server
     
-    `TORQUE_TOKEN` - The Torque Token which could be generate on integrations page of Colony Settings
+    `TORQUE_TOKEN` - The Torque Token which could be generate on integrations page of Torque Settings
 
     `TORQUE_SPACE` - The name of your Torque space
  
 3. In the config.yml, call the `torque/start-sandbox` and `torque/end-sandbox` to start and stop 
-sandbox in Colony
+sandbox in Torque
 4. Supply parameters to customize orb behaviour (see the list of parameters for orb commands [here](https://circleci.com/orbs/registry/orb/quali/torque#commands) 
-5. After starting colony sandbox (`torque/start-sandbox` command) you can use the following environment
+5. After starting Torque sandbox (`torque/start-sandbox` command) you can use the following environment
 variables in your job steps (the names of variable could be overridden):
 
     `SANDBOX_ID` - the id of launched sandbox

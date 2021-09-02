@@ -3,22 +3,22 @@ description: |
 parameters:
   colony-token:
     description: |
-      Name of environment variable containing Colony API Token
+      Name of environment variable containing Torque API Token
     type: env_var_name
     default: TORQUE_TOKEN
   colony-url:
     description: |
-      URL of Colony Server
+      URL of Torque Server
     type: env_var_name
     default: TORQUE_SERVER
   space:
     description: |
-      Name of Colony space
+      Name of Torque space
     type: env_var_name
     default: TORQUE_SPACE
   blueprint:
     description: |
-      Name of the blueprint used for creating a Colony sandbox.
+      Name of the blueprint used for creating a Torque sandbox.
     type: string
   sandbox-name:
     description: |
@@ -39,7 +39,7 @@ parameters:
     default: "{}"
   steps:
     type: steps
-    description: Steps to execute once the Colony Sandbox is available
+    description: Steps to execute once the Torque Sandbox is available
   image:
     description: The name of image
     default: 'circleci/python'
