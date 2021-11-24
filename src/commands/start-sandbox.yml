@@ -53,7 +53,7 @@ parameters:
       Timeout for this step in minutes. If the sandbox will not be ready when the timeout is reached,
       Torque will abort the deployment
     type: integer
-    default: 30      
+    default: 30
   duration:
     description: |
       Duration (ISO 8601), after which Torque will stop the deployment

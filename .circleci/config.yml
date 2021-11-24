@@ -1,32 +1,34 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@2
+  orb-tools: circleci/orb-tools@10.0
 workflows:
   btd:
     jobs:
-      - orb-tools/pack:
-          source-dir: src/
-          destination-orb-path: packed/orb.yml
-          workspace-path: packed/orb.yml
-          artifact-path: packed/orb.yml
+      - orb-tools/lint
+      - orb-tools/pack
 
-      - orb-tools/publish:
-          orb-path: packed/orb.yml
-          orb-ref: "ddovbii/colony@dev:${CIRCLE_BRANCH}"
-          publish-token-variable: "$CIRCLECI_API_TOKEN"
-          attach-workspace: true
-          checkout: false
-          requires: [orb-tools/pack]
-
-      - orb-tools/increment:
-          orb-path: packed/orb.yml
-          orb-ref: "ddovbii/colony"
-          segment: "patch"
-          publish-token-variable: "$CIRCLECI_API_TOKEN"
-          attach-workspace: true
-          checkout: false
-          requires: [orb-tools/pack]
+      - orb-tools/publish-dev:
+          orb-name: quali/torque
+          context: orb-publishing
+          requires:
+            - orb-tools/lint
+            - orb-tools/pack
+      # Publish a semver version of the orb. relies on
+      # the commit subject containing the text "[semver:patch|minor|major|skip]"
+      # as that will determine whether a patch, minor or major
+      # version will be published or if publishing should
+      # be skipped.
+      # e.g. [semver:patch] will cause a patch version to be published.
+      - orb-tools/dev-promote-prod-from-commit-subject:
+          orb-name: quali/torque
+          context: orb-publishing
+          add-pr-comment: false
+          fail-if-semver-not-indicated: true
+          publish-version-tag: false
+          requires:
+            - orb-tools/publish-dev
           filters:
             branches:
-              only: master
+              only:
+                - master

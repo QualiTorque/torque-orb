@@ -5,7 +5,7 @@ parameters:
     description: |
       Name of environment variable containing Torque API Token
     type: env_var_name
-    default : TORQUE_TOKEN
+    default: TORQUE_TOKEN
   torque-url:
     description: |
       URL of Torque Server

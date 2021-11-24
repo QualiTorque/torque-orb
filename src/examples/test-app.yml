@@ -5,7 +5,7 @@ description: |
   of your deployed application.
 usage:
   version: 2.1
-  
+
   orbs:
     torque: quali/torque@1.0
     aws-s3: circleci/aws-s3@1.0.11
@@ -40,6 +40,6 @@ usage:
                     echo "Getting application endpoint"
                     SB_ENDPOINT="SB_${SANDBOX_ID}_SHORTCUT_1"
                     echo "Checking ${!SB_ENDPOINT}"
-                    curl --write-out "%{http_code}\n" --silent --output /dev/null "${!SB_ENDPOINT}" 
+                    curl --write-out "%{http_code}\n" --silent --output /dev/null "${!SB_ENDPOINT}"
             requires:
               - build-and-publish
