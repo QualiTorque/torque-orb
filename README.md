@@ -1,5 +1,7 @@
 # Torque Orb for CircleCI
 
+[![CircleCI](https://circleci.com/gh/QualiTorque/torque-orb/tree/master.svg?style=svg)](https://circleci.com/gh/QualiTorque/torque-orb/tree/master)
+
 ## The Torque Orb
 
 Torque provides on-demands sandbox environments integrating with test tools and storage providers to pull
