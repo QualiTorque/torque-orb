@@ -26,4 +26,6 @@ steps:
     name: End Torque Sandbox
     command: |
       curl --silent -X DELETE "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id>>" \
-           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>" || exit 1
+          --header "TORQUE-API-CALLED-FROM: CircleCI" \
+          --header "accept: text/plain" \
+          --header "Authorization: bearer $<<parameters.torque-token>>" || exit 1

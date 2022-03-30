@@ -76,9 +76,11 @@ steps:
       echo $PAYLOAD
 
       status_code=`curl --write-out "%{http_code}\n" --output result.txt \
-               --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox" \
-               -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>" \
-               -H "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
+              --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox" \
+              --header "TORQUE-API-CALLED-FROM: CircleCI" \
+              --header "accept: text/plain" \
+              --header "Authorization: bearer $<<parameters.torque-token>>" \
+              --header "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
 
       if [[ $status_code -ge 400 ]]; then
         echo "Unable to start sandbox. Details: $(cat result.txt)"
@@ -99,7 +101,9 @@ steps:
         sleep 25
         details=`curl --silent \
            -X GET "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id-variable>>" \
-           -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>"`
+           --header "TORQUE-API-CALLED-FROM: CircleCI" \
+           --header "accept: text/plain" \
+           --header "Authorization: bearer $<<parameters.torque-token>>"`
         status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
         echo "Status is $status"
       done
