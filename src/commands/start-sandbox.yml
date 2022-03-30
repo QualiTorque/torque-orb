@@ -75,13 +75,19 @@ steps:
       )
       echo $PAYLOAD
 
-      sb=`curl --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox" \
+      status_code=`curl --write-out "%{http_code}\n" --output result.txt \
+               --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox" \
                -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>" \
                -H "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
 
-      sb=`echo $sb | sed 's/.*:"//' | sed 's/".*//'`
-      echo "Sandbox with id $sb has been started"
-      echo "export <<parameters.sandbox-id-variable>>=$sb" >> $BASH_ENV
+      if [[ $status_code -ge 400 ]]; then
+        echo "Unable to start sandbox. Details: $(cat result.txt)"
+        exit 1
+      else
+        sb=`cat result.txt | sed 's/.*:"//' | sed 's/".*//'`
+        echo "Sandbox with id $sb has been started"
+        echo "export <<parameters.sandbox-id-variable>>=$sb" >> $BASH_ENV
+      fi
 - run:
     name: Wait For Sandbox
     command: |
