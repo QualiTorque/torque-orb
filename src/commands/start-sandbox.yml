@@ -80,7 +80,7 @@ steps:
                -H "accept: text/plain" -H "Authorization: bearer $<<parameters.torque-token>>" \
                -H "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
 
-      if [ "$status_code" -ne "200" ]; then
+      if [[ $status_code -ge 400 ]]; then
         echo "Unable to start sandbox. Details: $(cat result.txt)"
         exit 1
       else
