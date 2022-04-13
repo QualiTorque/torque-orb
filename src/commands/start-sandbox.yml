@@ -77,7 +77,7 @@ steps:
 
       status_code=`curl --write-out "%{http_code}\n" --output result.txt \
               --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox" \
-              --header "TORQUE-API-CALLED-FROM: CircleCI" \
+              --header "User-Agent: Torque-Plugin-CirceCI/1.0.X" \
               --header "accept: text/plain" \
               --header "Authorization: bearer $<<parameters.torque-token>>" \
               --header "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
@@ -101,7 +101,7 @@ steps:
         sleep 25
         details=`curl --silent \
            -X GET "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id-variable>>" \
-           --header "TORQUE-API-CALLED-FROM: CircleCI" \
+           --header "User-Agent: Torque-Plugin-CirceCI/1.0.X" \ \
            --header "accept: text/plain" \
            --header "Authorization: bearer $<<parameters.torque-token>>"`
         status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
