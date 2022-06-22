@@ -42,12 +42,6 @@ parameters:
       Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
     type: string
     default: "{}"
-  artifacts:
-    description: |
-      String with the list of artifacts.
-      Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
-    type: string
-    default: "{}"
   timeout:
     description: >
       Timeout for this step in minutes. If the sandbox will not be ready when the timeout is reached,
@@ -69,15 +63,14 @@ steps:
            'blueprint_name':'<<parameters.blueprint>>',
            'duration': '<<parameters.duration>>',
            'inputs': <<parameters.inputs>>,
-           'artifacts': <<parameters.artifacts>>,
            'automation': true
         }"
       )
       echo $PAYLOAD
 
       status_code=`curl --write-out "%{http_code}\n" --output result.txt \
-              --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox" \
-              --header "User-Agent: Torque-Plugin-CirceCI/1.0.X" \
+              --silent -X POST "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/environments" \
+              --header "User-Agent: Torque-Plugin-CirceCI/1.1.X" \
               --header "accept: text/plain" \
               --header "Authorization: bearer $<<parameters.torque-token>>" \
               --header "Content-Type:  application/json" -d "$PAYLOAD"` || exit 1
@@ -100,11 +93,11 @@ steps:
         echo "****"
         sleep 25
         details=`curl --silent \
-           -X GET "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/sandbox/$<<parameters.sandbox-id-variable>>" \
-           --header "User-Agent: Torque-Plugin-CirceCI/1.0.X" \ \
+           -X GET "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/environments/$<<parameters.sandbox-id-variable>>" \
+           --header "User-Agent: Torque-Plugin-CirceCI/1.1.X" \ \
            --header "accept: text/plain" \
            --header "Authorization: bearer $<<parameters.torque-token>>"`
-        status=`echo $details | sed  "s/.*\"sandbox_status\":\"//" | sed "s/\".*//"`
+        status=`echo $details | sed  "s/.*\"computed_status\":\"//" | sed "s/\".*//"`
         echo "Status is $status"
       done
       if [[ $status != "Active" ]]; then

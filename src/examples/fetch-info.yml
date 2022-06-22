@@ -3,7 +3,7 @@ description: |
 usage:
   version: 2.1
   orbs:
-    torque: quali/torque@1
+    torque: quali/torque@1.1
   jobs:
     build:
       docker:
@@ -13,7 +13,6 @@ usage:
             sandbox-name: "test-sandbox"
             blueprint: "my-application"
             inputs: "{'AWS_INSTANCE_TYPE': 'm5.large'}"
-            artifacts: "{'app-frontend':'latest/my-app.latest.tar.gz'}"
         - run:
             name: Fetch Details
             command: echo "Sandbox ID is ${SANDBOX_ID}"

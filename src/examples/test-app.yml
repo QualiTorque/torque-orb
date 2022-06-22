@@ -7,7 +7,7 @@ usage:
   version: 2.1
 
   orbs:
-    torque: quali/torque@1.0
+    torque: quali/torque@1.1
     aws-s3: circleci/aws-s3@1.0.11
   jobs:
     build-and-publish:
@@ -32,14 +32,12 @@ usage:
             sandbox-name: "test-sandbox"
             blueprint: "my-web-application"
             inputs: "{'AWS_INSTANCE_TYPE': 'm5.large'}"
-            artifacts: "{'webapp-frontend':'latest/my-webapp.latest.tar.gz'}"
             steps:
               - run: echo "Do some testing here"
               - run:
                   command: |
-                    echo "Getting application endpoint"
-                    SB_ENDPOINT="SB_${SANDBOX_ID}_SHORTCUT_1"
-                    echo "Checking ${!SB_ENDPOINT}"
-                    curl --write-out "%{http_code}\n" --silent --output /dev/null "${!SB_ENDPOINT}"
+                    echo "Getting sandbox details"
+                    echo "You can process the json with jq and perform some tests"
+                    echo "${SANDBOX_DETAILS}"
             requires:
               - build-and-publish
