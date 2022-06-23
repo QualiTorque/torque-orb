@@ -91,10 +91,11 @@ steps:
       status=''
       prev_status=''
       while [[ $(date +%s) -le $timeout ]]; do
+        url="$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/environments/$<<parameters.sandbox-id-variable>>"
         echo "****"
         details=`curl --silent \
-           -X GET "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/environments/$<<parameters.sandbox-id-variable>>" \
-           --header "User-Agent: Torque-Plugin-CirceCI/1.1.X" \ \
+           -X GET "${url}" \
+           --header "User-Agent: Torque-Plugin-CirceCI/1.1.X" \
            --header "accept: text/plain" \
            --header "Authorization: bearer $<<parameters.torque-token>>"`
         status=`echo $details | sed  "s/.*\"computed_status\":\"//" | sed "s/\".*//"`
