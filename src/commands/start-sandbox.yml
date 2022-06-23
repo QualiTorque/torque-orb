@@ -120,5 +120,5 @@ steps:
         echo "Timeout was reached or Sandbox is active with errors"
         exit 1
       fi
-      
+
       echo "export <<parameters.sandbox-details-variable>>=$details" >> $BASH_ENV
