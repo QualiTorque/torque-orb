@@ -31,12 +31,6 @@ parameters:
       Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
     type: string
     default: "{}"
-  artifacts:
-    description: |
-      String with the list of artifacts.
-      Json format {'key1': 'value1', ..., 'keyN': 'valueN'}
-    type: string
-    default: "{}"
   steps:
     type: steps
     description: Steps to execute once the Torque Sandbox is available
@@ -58,7 +52,6 @@ steps:
       sandbox-name: <<parameters.sandbox-name>>
       blueprint: <<parameters.blueprint>>
       inputs: <<parameters.inputs>>
-      artifacts: <<parameters.artifacts>>
       torque-token: <<parameters.torque-token>>
       torque-url: <<parameters.torque-url>>
       space: <<parameters.space>>
