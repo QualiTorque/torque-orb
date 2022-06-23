@@ -89,26 +89,35 @@ steps:
       echo "Waiting for sandbox $<<parameters.sandbox-id-variable>>"
       timeout=`date --date="<<parameters.timeout>> minutes" +%s`
       status=''
-      while [[ $(date +%s) -le $timeout && $status != "Active" ]]; do
+      prev_status=''
+      while [[ $(date +%s) -le $timeout ]]; do
         echo "****"
-        sleep 25
         details=`curl --silent \
            -X GET "$<<parameters.torque-url>>/api/spaces/$<<parameters.space>>/environments/$<<parameters.sandbox-id-variable>>" \
            --header "User-Agent: Torque-Plugin-CirceCI/1.1.X" \ \
            --header "accept: text/plain" \
            --header "Authorization: bearer $<<parameters.torque-token>>"`
         status=`echo $details | sed  "s/.*\"computed_status\":\"//" | sed "s/\".*//"`
-        echo "Status is $status"
+        if [[ $status != $prev_status ]]; then
+          echo "Status is $status"
+          prev_status=$status
+        fi
+        if [[ $status == "Active" ]]; then
+          break
+        fi
+        if [[ $status == "Ended" ]]; then
+          echo "Error: sandbox is ended"
+        exit 1
+        fi
+        if [[ $status == "Active With Error" ]]; then
+          echo "Error: sandbox is active with error!"
+          exit 1
+        fi
+        sleep 20
       done
       if [[ $status != "Active" ]]; then
         echo "Timeout was reached or Sandbox is active with errors"
         exit 1
       fi
+      
       echo "export <<parameters.sandbox-details-variable>>=$details" >> $BASH_ENV
-      var=1
-      for link in `echo $details | egrep -o '\["http?://[^ ]+*."\]' | sed 's/"//g' | tr -d '[],'`
-      do
-        echo "Writing quick link $link to environment variable SB_${<<parameters.sandbox-id-variable>>}_SHORTCUT_${var}"
-        echo "export SB_${<<parameters.sandbox-id-variable>>}_SHORTCUT_${var}=$link" >> $BASH_ENV
-        var=$((var+1))
-      done
